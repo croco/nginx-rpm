@@ -1,0 +1,50 @@
+--- nginx.spec	2016-01-27 00:02:51.000000000 +0900
++++ /tmp/nginx.spec	2016-03-01 17:48:25.455753356 +0900
+@@ -31,6 +31,8 @@
+ Requires(pre): shadow-utils
+ Requires: systemd
+ Requires: openssl >= 1.0.1
++Requires: luajit
++Requires: openldap
+ BuildRequires: systemd
+ BuildRequires: openssl-devel >= 1.0.1
+ Epoch: 1
+@@ -74,6 +76,9 @@
+ Source8: nginx.service
+ Source9: nginx.upgrade.sh
+ Source10: nginx.suse.logrotate
++Source11: nginx-auth-ldap-master.tar.gz
++Source12: nginx-fluentd-module-master.tar.gz
++Source13: lua-nginx-module-master.tar.gz
+ 
+ License: 2-clause BSD-like license
+ 
+@@ -99,7 +104,7 @@
+ %endif
+ 
+ %prep
+-%setup -q
++%setup -a 11 -a 12 -a 13 -q
+ 
+ %build
+ ./configure \
+@@ -135,6 +140,9 @@
+         --with-file-aio \
+         --with-ipv6 \
+         --with-debug \
++	--add-module=nginx-auth-ldap-master \
++	--add-module=nginx-fluentd-module-master \
++	--add-module=lua-nginx-module-master \
+         %{?with_spdy:--with-http_spdy_module} \
+         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
+         $*
+@@ -173,6 +181,9 @@
+         --with-mail_ssl_module \
+         --with-file-aio \
+         --with-ipv6 \
++	--add-module=nginx-auth-ldap-master \
++	--add-module=nginx-fluentd-module-master \
++	--add-module=lua-nginx-module-master \
+         %{?with_spdy:--with-http_spdy_module} \
+         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
+         $*
