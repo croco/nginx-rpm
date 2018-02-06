@@ -6,7 +6,6 @@ this container makes nginx rpm package which contains following modules.
 
 * nginx-ldap-module
 * nginx-lua-module
-* nginx-fluentd-module
 
 ## how to build
 

@@ -9,8 +9,7 @@ RUN rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos
 RUN yum -y install vim-enhanced net-tools bash-completion git bind-utils wget
 
 
-RUN yum install -y rpm-build openssl-devel zlib-devel pcre-devel gcc make openldap-devel luajit-devel.x86_64
+RUN yum install -y rpm-build openssl-devel zlib-devel pcre-devel gcc make openldap-devel luajit-devel.x86_64 redhat-lsb-core
 
 RUN yum -y update && yum clean all
-
 ADD opt /opt

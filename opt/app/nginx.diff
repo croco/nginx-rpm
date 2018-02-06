@@ -1,50 +1,51 @@
---- nginx.spec	2016-01-27 00:02:51.000000000 +0900
-+++ /tmp/nginx.spec	2016-03-01 17:48:25.455753356 +0900
-@@ -31,6 +31,8 @@
+diff --git a/orig.spec b/nginx.spec
+index 1511d7f..913cfe6 100644
+--- a/orig.spec
++++ b/nginx.spec
+@@ -22,6 +22,8 @@ BuildRequires: redhat-lsb-core
+ %define epoch 1
+ Epoch: %{epoch}
  Requires(pre): shadow-utils
- Requires: systemd
- Requires: openssl >= 1.0.1
 +Requires: luajit
 +Requires: openldap
+ Requires: systemd
  BuildRequires: systemd
- BuildRequires: openssl-devel >= 1.0.1
- Epoch: 1
-@@ -74,6 +76,9 @@
- Source8: nginx.service
- Source9: nginx.upgrade.sh
- Source10: nginx.suse.logrotate
-+Source11: nginx-auth-ldap-master.tar.gz
-+Source12: nginx-fluentd-module-master.tar.gz
-+Source13: lua-nginx-module-master.tar.gz
+ %define os_minor %(lsb_release -rs | cut -d '.' -f 2)
+@@ -78,6 +80,8 @@ Source10: nginx.suse.logrotate
+ Source11: nginx-debug.service
+ Source12: COPYRIGHT
+ Source13: nginx.check-reload.sh
++Source14: nginx-auth-ldap-master.tar.gz
++Source15: lua-nginx-module-master.tar.gz
  
  License: 2-clause BSD-like license
  
-@@ -99,7 +104,7 @@
+@@ -96,7 +100,7 @@ a mail proxy server.
  %endif
  
  %prep
 -%setup -q
-+%setup -a 11 -a 12 -a 13 -q
++%setup -a 14 -a 15 -q
+ cp %{SOURCE2} .
+ sed -e 's|%%DEFAULTSTART%%|2 3 4 5|g' -e 's|%%DEFAULTSTOP%%|0 1 6|g' \
+     -e 's|%%PROVIDES%%|nginx|g' < %{SOURCE2} > nginx.init
+@@ -107,13 +111,17 @@ sed -e 's|%%DEFAULTSTART%%||g' -e 's|%%DEFAULTSTOP%%|0 1 2 3 4 5 6|g' \
+ ./configure %{BASE_CONFIGURE_ARGS} \
+     --with-cc-opt="%{WITH_CC_OPT}" \
+     --with-ld-opt="%{WITH_LD_OPT}" \
+-    --with-debug
++    --with-debug \
++    --add-module=nginx-auth-ldap-master \
++    --add-module=lua-nginx-module-master
+ make %{?_smp_mflags}
+ %{__mv} %{bdir}/objs/nginx \
+     %{bdir}/objs/nginx-debug
+ ./configure %{BASE_CONFIGURE_ARGS} \
+     --with-cc-opt="%{WITH_CC_OPT}" \
+-    --with-ld-opt="%{WITH_LD_OPT}"
++    --with-ld-opt="%{WITH_LD_OPT}" \
++    --add-module=nginx-auth-ldap-master \
++    --add-module=lua-nginx-module-master
+ make %{?_smp_mflags}
  
- %build
- ./configure \
-@@ -135,6 +140,9 @@
-         --with-file-aio \
-         --with-ipv6 \
-         --with-debug \
-+	--add-module=nginx-auth-ldap-master \
-+	--add-module=nginx-fluentd-module-master \
-+	--add-module=lua-nginx-module-master \
-         %{?with_spdy:--with-http_spdy_module} \
-         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
-         $*
-@@ -173,6 +181,9 @@
-         --with-mail_ssl_module \
-         --with-file-aio \
-         --with-ipv6 \
-+	--add-module=nginx-auth-ldap-master \
-+	--add-module=nginx-fluentd-module-master \
-+	--add-module=lua-nginx-module-master \
-         %{?with_spdy:--with-http_spdy_module} \
-         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
-         $*
+ %install
