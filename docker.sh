@@ -17,7 +17,7 @@ case "$1" in
         docker run -it \
             -v `pwd`/opt:/opt \
             ${REPO}:${TAG} \
-            bash /opt/app/do.sh
+            /bin/bash
         ;;
 
     "push" )

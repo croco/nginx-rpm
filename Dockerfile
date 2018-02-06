@@ -1,4 +1,4 @@
-FROM repo.shinobi.vpn:5010/wm_dockerbase/centos7_croco:0.1.0
+FROM registry.comm.croco:5000/wm_dockerbase/centos7_croco:0.1.0
 
 RUN yum -y install epel-release
 
